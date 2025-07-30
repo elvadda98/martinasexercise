@@ -1,422 +1,280 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vocabulary Practice Game</title>
+    <title>Business Vocabulary Challenge</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f5f5f5;
+            background-color: #f5f9fc;
+            line-height: 1.6;
         }
-        h1, h2 {
+        h1 {
             color: #2c3e50;
+            text-align: center;
+            margin-bottom: 10px;
         }
-        .menu {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        .word-bank {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-radius: 8px;
             margin-bottom: 20px;
+            text-align: center;
         }
-        .exercise {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            display: none;
-        }
-        button {
+        .word-bank span {
+            display: inline-block;
             background-color: #3498db;
+            color: white;
+            padding: 6px 12px;
+            margin: 5px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .sentence {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            position: relative;
+        }
+        input {
+            padding: 10px;
+            border: 2px solid #3498db;
+            border-radius: 6px;
+            width: 150px;
+            font-size: 16px;
+            margin: 0 5px;
+        }
+        .check-btn {
+            background-color: #2ecc71;
             color: white;
             border: none;
             padding: 10px 15px;
-            border-radius: 5px;
+            border-radius: 6px;
             cursor: pointer;
-            margin: 5px;
-            font-size: 16px;
+            margin-left: 10px;
+            font-weight: bold;
+            transition: all 0.3s;
         }
-        button:hover {
-            background-color: #2980b9;
+        .check-btn:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
         }
-        .question {
-            margin-bottom: 15px;
+        .hint-btn {
+            background-color: #f39c12;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-left: 10px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .hint-btn:hover {
+            background-color: #e67e22;
+            transform: translateY(-2px);
+        }
+        .feedback {
+            margin-top: 12px;
             padding: 10px;
-            border-left: 4px solid #3498db;
-            background-color: #f8f9fa;
-        }
-        .options {
-            margin: 10px 0;
-        }
-        .option {
-            margin: 5px 0;
-            padding: 8px;
-            background-color: #eaf2f8;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .option:hover {
-            background-color: #d4e6f1;
+            border-radius: 6px;
+            display: none;
+            font-size: 15px;
         }
         .correct {
-            background-color: #d5f5e3;
+            background-color: #e8f8f5;
+            color: #27ae60;
             border-left: 4px solid #2ecc71;
         }
         .incorrect {
-            background-color: #fadbd8;
+            background-color: #fdedec;
+            color: #e74c3c;
             border-left: 4px solid #e74c3c;
         }
-        .explanation {
-            font-style: italic;
+        #score {
+            text-align: center;
+            font-size: 20px;
+            margin: 25px 0;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        #restart {
+            display: block;
+            margin: 30px auto;
+            padding: 12px 25px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        #restart:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .hint-text {
             color: #7f8c8d;
-            margin-top: 5px;
+            font-size: 14px;
+            margin-top: 8px;
+            padding: 8px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
             display: none;
         }
-        .back-btn {
-            background-color: #95a5a6;
-        }
-        .back-btn:hover {
-            background-color: #7f8c8d;
-        }
-        .vocab-words {
-            background-color: #e8f4f8;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px;
+        .correct-answer {
             font-weight: bold;
+            color: #27ae60;
         }
-        #story-completion input {
-            padding: 5px;
-            margin: 0 5px;
-            border: 1px solid #ddd;
-            border-radius: 3px;
+        .progress-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            margin: 20px 0;
         }
-        #story-completion .check-btn {
-            padding: 5px 10px;
-            font-size: 14px;
+        .progress-bar {
+            height: 10px;
+            background-color: #2ecc71;
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.5s;
         }
     </style>
 </head>
 <body>
-    <div class="menu" id="game-menu">
-        <h1>Vocabulary Practice Game</h1>
-        <div class="vocab-words">
-            Practice these words: <strong>catch up, thousand, steps, cave, usually, rare, despite</strong>
-        </div>
-        
-        <h2>Game Menu</h2>
-        <button onclick="showExercise('fill-blank')">1. Fill-in-the-Blank Exercise</button><br>
-        <button onclick="showExercise('sentence-correction')">2. Sentence Correction</button><br>
-        <button onclick="showExercise('word-matching')">3. Word Matching</button><br>
-        <button onclick="showExercise('story-completion')">4. Story Completion</button>
+    <h1>📊 Business Vocabulary Challenge</h1>
+    
+    <div class="word-bank">
+        <h3>Word Bank:</h3>
+        <span>depending on</span>
+        <span>headquarters</span>
+        <span>overcome</span>
+        <span>main</span>
+        <span>convenient</span>
+        <span>write down</span>
+        <span>meet up</span>
+        <span>topic</span>
+        <span>come up with</span>
+        <span>kick off</span>
     </div>
-
-    <!-- Fill in the Blank Exercise -->
-    <div class="exercise" id="fill-blank">
-        <h2>Fill-in-the-Blank</h2>
-        <p>Complete each sentence with the correct word from our vocabulary list.</p>
-        
-        <div class="question" id="fb1">
-            <p>1. After being sick for a week, Maria had to work hard to ______ with her classmates.</p>
-            <div class="options">
-                <div class="option" onclick="checkAnswer('fb1', this, 'catch up')">catch up</div>
-                <div class="option" onclick="checkAnswer('fb1', this, 'wrong')">cave</div>
-                <div class="option" onclick="checkAnswer('fb1', this, 'wrong')">steps</div>
-                <div class="option" onclick="checkAnswer('fb1', this, 'wrong')">usually</div>
-            </div>
-            <div class="explanation">"Catch up" means to reach the same level as others after falling behind.</div>
-        </div>
-        
-        <div class="question" id="fb2">
-            <p>2. The explorers found ancient paintings inside the dark ______.</p>
-            <div class="options">
-                <div class="option" onclick="checkAnswer('fb2', this, 'cave')">cave</div>
-                <div class="option" onclick="checkAnswer('fb2', this, 'wrong')">thousand</div>
-                <div class="option" onclick="checkAnswer('fb2', this, 'wrong')">rare</div>
-                <div class="option" onclick="checkAnswer('fb2', this, 'wrong')">despite</div>
-            </div>
-            <div class="explanation">A cave is a natural underground space large enough for humans to enter.</div>
-        </div>
-        
-        <div class="question" id="fb3">
-            <p>3. ______ the rain, we decided to continue our hike up the mountain.</p>
-            <div class="options">
-                <div class="option" onclick="checkAnswer('fb3', this, 'wrong')">Usually</div>
-                <div class="option" onclick="checkAnswer('fb3', this, 'wrong')">Rare</div>
-                <div class="option" onclick="checkAnswer('fb3', this, 'wrong')">Steps</div>
-                <div class="option" onclick="checkAnswer('fb3', this, 'despite')">Despite</div>
-            </div>
-            <div class="explanation">"Despite" means without being affected by the particular factor mentioned.</div>
-        </div>
-        
-        <div class="question" id="fb4">
-            <p>4. I take about ten ______ to walk from my bed to the bathroom every morning.</p>
-            <div class="options">
-                <div class="option" onclick="checkAnswer('fb4', this, 'wrong')">caves</div>
-                <div class="option" onclick="checkAnswer('fb4', this, 'wrong')">rare</div>
-                <div class="option" onclick="checkAnswer('fb4', this, 'steps')">steps</div>
-                <div class="option" onclick="checkAnswer('fb4', this, 'wrong')">thousand</div>
-            </div>
-            <div class="explanation">Steps are movements made by lifting one foot and putting it down in another spot.</div>
-        </div>
-        
-        <div class="question" id="fb5">
-            <p>5. Blue diamonds are extremely ______ and very valuable.</p>
-            <div class="options">
-                <div class="option" onclick="checkAnswer('fb5', this, 'wrong')">usually</div>
-                <div class="option" onclick="checkAnswer('fb5', this, 'rare')">rare</div>
-                <div class="option" onclick="checkAnswer('fb5', this, 'wrong')">thousand</div>
-                <div class="option" onclick="checkAnswer('fb5', this, 'wrong')">despite</div>
-            </div>
-            <div class="explanation">"Rare" means not occurring very often.</div>
-        </div>
-        
-        <button class="back-btn" onclick="showMenu()">Back to Menu</button>
+    
+    <div id="score">Score: 0/15</div>
+    <div class="progress-container">
+        <div class="progress-bar" id="progress"></div>
     </div>
-
-    <!-- Sentence Correction Exercise -->
-    <div class="exercise" id="sentence-correction">
-        <h2>Sentence Correction</h2>
-        <p>Each sentence has one incorrect word. Choose the correct replacement from our vocabulary list.</p>
-        
-        <div class="question" id="sc1">
-            <p>1. I cave go to the gym on Mondays and Wednesdays.</p>
-            <p>Original word: cave</p>
-            <p>Correct word:</p>
-            <div class="options">
-                <div class="option" onclick="checkAnswer('sc1', this, 'usually')">usually</div>
-                <div class="option" onclick="checkAnswer('sc1', this, 'wrong')">rare</div>
-                <div class="option" onclick="checkAnswer('sc1', this, 'wrong')">steps</div>
-                <div class="option" onclick="checkAnswer('sc1', this, 'wrong')">thousand</div>
-            </div>
-            <div class="explanation">"Usually" is the correct word meaning "under normal conditions."</div>
-        </div>
-        
-        <div class="question" id="sc2">
-            <p>2. It will take a rare hours to finish this project.</p>
-            <p>Original word: rare</p>
-            <p>Correct word:</p>
-            <div class="options">
-                <div class="option" onclick="checkAnswer('sc2', this, 'wrong')">despite</div>
-                <div class="option" onclick="checkAnswer('sc2', this, 'wrong')">cave</div>
-                <div class="option" onclick="checkAnswer('sc2', this, 'thousand')">thousand</div>
-                <div class="option" onclick="checkAnswer('sc2', this, 'wrong')">catch up</div>
-            </div>
-            <div class="explanation">"Thousand" is the correct word here to indicate a large number of hours.</div>
-        </div>
-        
-        <div class="question" id="sc3">
-            <p>3. Despite of his fear of heights, Tom climbed the thousand to the observation deck.</p>
-            <p>Original word: thousand</p>
-            <p>Correct word:</p>
-            <div class="options">
-                <div class="option" onclick="checkAnswer('sc3', this, 'wrong')">cave</div>
-                <div class="option" onclick="checkAnswer('sc3', this, 'steps')">steps</div>
-                <div class="option" onclick="checkAnswer('sc3', this, 'wrong')">usually</div>
-                <div class="option" onclick="checkAnswer('sc3', this, 'wrong')">rare</div>
-            </div>
-            <div class="explanation">"Steps" refers to the individual levels in a staircase.</div>
-        </div>
-        
-        <div class="question" id="sc4">
-            <p>4. The museum has a usually collection of medieval artifacts.</p>
-            <p>Original word: usually</p>
-            <p>Correct word:</p>
-            <div class="options">
-                <div class="option" onclick="checkAnswer('sc4', this, 'wrong')">catch up</div>
-                <div class="option" onclick="checkAnswer('sc4', this, 'wrong')">despite</div>
-                <div class="option" onclick="checkAnswer('sc4', this, 'rare')">rare</div>
-                <div class="option" onclick="checkAnswer('sc4', this, 'wrong')">cave</div>
-            </div>
-            <div class="explanation">"Rare" describes something uncommon or unusual, which fits the valuable artifacts.</div>
-        </div>
-        
-        <button class="back-btn" onclick="showMenu()">Back to Menu</button>
+    
+    <div id="sentences-container">
+        <!-- Sentences will be added by JavaScript -->
     </div>
-
-    <!-- Word Matching Exercise -->
-    <div class="exercise" id="word-matching">
-        <h2>Word Matching</h2>
-        <p>Match each word with its correct definition.</p>
-        
-        <div class="question" id="wm1">
-            <p>1. Catch up</p>
-            <div class="options">
-                <div class="option" onclick="checkAnswer('wm1', this, 'correct')">Reach the same level or standard as others</div>
-                <div class="option" onclick="checkAnswer('wm1', this, 'wrong')">A natural underground chamber</div>
-                <div class="option" onclick="checkAnswer('wm1', this, 'wrong')">Not common or frequent</div>
-                <div class="option" onclick="checkAnswer('wm1', this, 'wrong')">A sequence of foot movements in walking</div>
-            </div>
-        </div>
-        
-        <div class="question" id="wm2">
-            <p>2. Cave</p>
-            <div class="options">
-                <div class="option" onclick="checkAnswer('wm2', this, 'wrong')">Without being affected by</div>
-                <div class="option" onclick="checkAnswer('wm2', this, 'correct')">A natural underground chamber</div>
-                <div class="option" onclick="checkAnswer('wm2', this, 'wrong')">Under normal conditions</div>
-                <div class="option" onclick="checkAnswer('wm2', this, 'wrong')">The number 1,000</div>
-            </div>
-        </div>
-        
-        <div class="question" id="wm3">
-            <p>3. Despite</p>
-            <div class="options">
-                <div class="option" onclick="checkAnswer('wm3', this, 'correct')">Without being affected by</div>
-                <div class="option" onclick="checkAnswer('wm3', this, 'wrong')">Occurring very often</div>
-                <div class="option" onclick="checkAnswer('wm3', this, 'wrong')">Individual movements in walking</div>
-                <div class="option" onclick="checkAnswer('wm3', this, 'wrong')">To reach the same level as others</div>
-            </div>
-        </div>
-        
-        <div class="question" id="wm4">
-            <p>4. Rare</p>
-            <div class="options">
-                <div class="option" onclick="checkAnswer('wm4', this, 'wrong')">The number 1,000</div>
-                <div class="option" onclick="checkAnswer('wm4', this, 'wrong')">Under normal conditions</div>
-                <div class="option" onclick="checkAnswer('wm4', this, 'correct')">Not common or frequent</div>
-                <div class="option" onclick="checkAnswer('wm4', this, 'wrong')">A natural underground space</div>
-            </div>
-        </div>
-        
-        <div class="question" id="wm-answers" style="display: none;">
-            <h3>Check Your Answers:</h3>
-            <ul>
-                <li>Catch up = Reach the same level</li>
-                <li>Cave = Underground chamber</li>
-                <li>Despite = Without being affected by</li>
-                <li>Rare = Not common</li>
-            </ul>
-        </div>
-        
-        <button onclick="showAnswers()">Show All Answers</button>
-        <button class="back-btn" onclick="showMenu()">Back to Menu</button>
-    </div>
-
-    <!-- Story Completion Exercise -->
-    <div class="exercise" id="story-completion">
-        <h2>Story Completion</h2>
-        <p>Complete the story by filling in the blanks with words from our vocabulary list.</p>
-        
-        <div id="story-text">
-            <h3>The Mountain Adventure</h3>
-            <p>Emma <input type="text" id="blank1" size="10"> goes hiking on weekends. Last Saturday, she decided to explore a new trail that had over a <input type="text" id="blank2" size="10"> feet of elevation gain. <input type="text" id="blank3" size="10"> being an experienced hiker, she found the climb challenging.</p>
-            
-            <p>Halfway up, she discovered a hidden <input type="text" id="blank4" size="10"> with beautiful rock formations. Inside, she found some <input type="text" id="blank5" size="10"> purple crystals that only form in certain conditions.</p>
-            
-            <p>On her way down, she twisted her ankle and had to take slow <input type="text" id="blank6" size="10">. Her friends waited for her at the bottom, and she promised to <input type="text" id="blank7" size="10"> with them next week when her ankle healed.</p>
-        </div>
-        
-        <button class="check-btn" onclick="checkStory()">Check Answers</button>
-        <div id="story-feedback" style="margin-top: 15px;"></div>
-        
-        <div id="correct-answers" style="display: none; margin-top: 15px;">
-            <h4>Correct Answers:</h4>
-            <ol>
-                <li>usually</li>
-                <li>thousand</li>
-                <li>Despite</li>
-                <li>cave</li>
-                <li>rare</li>
-                <li>steps</li>
-                <li>catch up</li>
-            </ol>
-            <p>The completed story shows natural usage of all vocabulary words in context.</p>
-        </div>
-        
-        <button onclick="showCorrectAnswers()">Show Correct Answers</button>
-        <button class="back-btn" onclick="showMenu()">Back to Menu</button>
-    </div>
+    
+    <button id="restart">Restart Game</button>
 
     <script>
-        function showExercise(exerciseId) {
-            document.getElementById('game-menu').style.display = 'none';
-            document.getElementById(exerciseId).style.display = 'block';
-        }
+        // Vocabulary words and sentences
+        const wordBank = [
+            "depending on", "headquarters", "overcome", "main", "convenient",
+            "write down", "meet up", "topic", "come up with", "kick off"
+        ];
         
-        function showMenu() {
-            document.getElementById('game-menu').style.display = 'block';
-            // Hide all exercises
-            const exercises = document.querySelectorAll('.exercise');
-            exercises.forEach(ex => ex.style.display = 'none');
-        }
+        const sentences = [
+            { text: "We'll ______ the meeting at 9 AM sharp tomorrow morning.", answer: "kick off", hint: "Means 'start' (especially an event)" },
+            { text: "The company's ______ are located in New York City.", answer: "headquarters", hint: "Main office of a company" },
+            { text: "Please ______ your ideas so we don't forget them.", answer: "write down", hint: "Put on paper" },
+            { text: "Let's ______ after work to discuss the project.", answer: "meet up", hint: "Get together" },
+            { text: "The ______ reason for our success is our great team.", answer: "main", hint: "Most important" },
+            { text: "We need to ______ these technical difficulties before launch.", answer: "overcome", hint: "Solve a problem" },
+            { text: "Is 2 PM a ______ time for our appointment?", answer: "convenient", hint: "Suitable or easy" },
+            { text: "The ______ for today's discussion is workplace safety.", answer: "topic", hint: "Subject of discussion" },
+            { text: "Can you ______ a better solution to this problem?", answer: "come up with", hint: "Invent or suggest" },
+            { text: "Our decision will be ______ the results of the survey.", answer: "depending on", hint: "Determined by" },
+            { text: "The team worked hard to ______ all obstacles.", answer: "overcome", hint: "Deal with successfully" },
+            { text: "The ______ entrance is on the south side of the building.", answer: "main", hint: "Primary or most important" },
+            { text: "We'll ______ at the coffee shop near the office.", answer: "meet up", hint: "Gather together" },
+            { text: "The conference will ______ with a keynote speech.", answer: "kick off", hint: "Begin officially" },
+            { text: "This location is ______ for all team members.", answer: "convenient", hint: "Easy to access" }
+        ];
+
+        let score = 0;
         
-        function checkAnswer(questionId, element, correct) {
-            const questionDiv = document.getElementById(questionId);
-            const options = questionDiv.querySelectorAll('.option');
+        // Initialize the game
+        function initGame() {
+            score = 0;
+            document.getElementById("score").textContent = "Score: 0/15";
+            document.getElementById("progress").style.width = "0%";
+            const container = document.getElementById("sentences-container");
+            container.innerHTML = "";
             
-            // Remove any previous highlighting
-            options.forEach(opt => {
-                opt.classList.remove('correct', 'incorrect');
-            });
-            
-            // Highlight the selected option
-            if (correct === 'correct' || element.textContent.toLowerCase() === correct.toLowerCase()) {
-                element.classList.add('correct');
-            } else {
-                element.classList.add('incorrect');
-                // Also highlight the correct answer if available
-                if (correct !== 'wrong') {
-                    options.forEach(opt => {
-                        if (opt.textContent.toLowerCase() === correct.toLowerCase()) {
-                            opt.classList.add('correct');
-                        }
-                    });
-                }
-            }
-            
-            // Show explanation
-            questionDiv.querySelector('.explanation').style.display = 'block';
-        }
-        
-        function showAnswers() {
-            document.getElementById('wm-answers').style.display = 'block';
-        }
-        
-        function checkStory() {
-            const answers = {
-                blank1: 'usually',
-                blank2: 'thousand',
-                blank3: 'Despite',
-                blank4: 'cave',
-                blank5: 'rare',
-                blank6: 'steps',
-                blank7: 'catch up'
-            };
-            
-            let correctCount = 0;
-            let feedback = '';
-            
-            for (const [id, correctAnswer] of Object.entries(answers)) {
-                const input = document.getElementById(id);
-                const userAnswer = input.value.trim().toLowerCase();
+            // Create sentence elements
+            sentences.forEach((sentence, index) => {
+                const sentenceDiv = document.createElement("div");
+                sentenceDiv.className = "sentence";
                 
-                if (userAnswer === correctAnswer.toLowerCase()) {
-                    input.style.backgroundColor = '#d5f5e3';
-                    input.style.borderColor = '#2ecc71';
-                    correctCount++;
-                } else {
-                    input.style.backgroundColor = '#fadbd8';
-                    input.style.borderColor = '#e74c3c';
-                    feedback += `<p>Blank ${id.replace('blank', '')} ("${userAnswer || 'empty'}") should be "${correctAnswer}"</p>`;
-                }
-            }
+                const parts = sentence.text.split("______");
+                
+                sentenceDiv.innerHTML = `
+                    <p>${index + 1}. ${parts[0]}<input type="text" id="answer-${index}" data-answer="${sentence.answer.toLowerCase()}">${parts[1]}</p>
+                    <button class="check-btn" onclick="checkAnswer(${index})">Check Answer</button>
+                    <button class="hint-btn" onclick="showHint(${index})">Get Hint</button>
+                    <div class="hint-text" id="hint-${index}">💡 ${sentence.hint}</div>
+                    <div class="feedback" id="feedback-${index}"></div>
+                `;
+                
+                container.appendChild(sentenceDiv);
+            });
+        }
+        
+        // Show hint
+        function showHint(index) {
+            const hint = document.getElementById(`hint-${index}`);
+            hint.style.display = "block";
+        }
+        
+        // Check answer
+        function checkAnswer(index) {
+            const input = document.getElementById(`answer-${index}`);
+            const feedback = document.getElementById(`feedback-${index}`);
+            const userAnswer = input.value.trim().toLowerCase();
+            const correctAnswer = input.dataset.answer;
             
-            const feedbackDiv = document.getElementById('story-feedback');
-            if (correctCount === 7) {
-                feedbackDiv.innerHTML = '<p style="color:#2ecc71;">Perfect! All answers are correct!</p>';
+            if (userAnswer === correctAnswer) {
+                feedback.innerHTML = "✓ <span class='correct-answer'>Correct!</span> Well done!";
+                feedback.className = "feedback correct";
+                feedback.style.display = "block";
+                input.style.borderColor = "#2ecc71";
+                score++;
+                updateScore();
             } else {
-                feedbackDiv.innerHTML = `<p>You got ${correctCount} out of 7 correct.</p>${feedback}`;
+                feedback.innerHTML = `✗ <span class='correct-answer'>Answer: ${correctAnswer}</span> - Try again!`;
+                feedback.className = "feedback incorrect";
+                feedback.style.display = "block";
+                input.style.borderColor = "#e74c3c";
             }
         }
         
-        function showCorrectAnswers() {
-            document.getElementById('correct-answers').style.display = 'block';
+        // Update score and progress
+        function updateScore() {
+            document.getElementById("score").textContent = `Score: ${score}/15`;
+            const progress = (score / 15) * 100;
+            document.getElementById("progress").style.width = `${progress}%`;
+            
+            if (score === 15) {
+                document.getElementById("score").innerHTML += " 🎉 Perfect!";
+            }
         }
+        
+        // Restart game
+        document.getElementById("restart").onclick = initGame;
+        
+        // Start the game
+        initGame();
     </script>
 </body>
 </html>
